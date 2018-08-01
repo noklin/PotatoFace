@@ -12,7 +12,8 @@ public class ComponentConfig{
 	}
 
 	public String getString(String value) {
-		return JsonUtil.asString(config.get(value));
+		JSONValue val = config.get(value);
+		return val == null ? null : JsonUtil.asString(config.get(value));
 	}
 	
 	public void forEach(BiConsumer<String,JSONValue> consumer) {

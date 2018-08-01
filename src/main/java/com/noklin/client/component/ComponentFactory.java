@@ -1,19 +1,22 @@
 package com.noklin.client.component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.noklin.client.Log;
+import com.noklin.client.util.Json;
 
-public class ComponentFactory {
-
+public enum ComponentFactory {
+	INSTANCE;
+	
+	/*
+	 * 
+	 * 
+	 * */
+	
 	public Component create(String json) {
-		ComponentConfig config = new ComponentConfig(JsonUtil.asJSONValueMap(json));
+		ComponentConfig config = new ComponentConfig(Json.asJSONValueMap(json));
 		Component component = craete(config.getString("type"), config);
 		component.configurate(); 
 		return component;
 	}
-
 	
 	private Component craete(String typeName, ComponentConfig config) {
 		switch(typeName) {
@@ -23,26 +26,6 @@ public class ComponentFactory {
 				return Component.NULL;
 			}
 		}
-		
 	}
-	
-	public static class ComponentTemplate{
-		final String name = "name";
-		final Map<String,String> config = new HashMap<>();
-
-		public String getConfigPropertyAsString(String name){
-			throw new UnsupportedOperationException();
-		}
-		
-		public int getConfigPropertyAsInt(String name){
-			throw new UnsupportedOperationException();
-		}
-		
-		public boolean getConfigPropertyAsBool(String name){
-			throw new UnsupportedOperationException();
-		}
-	}
-	
-	
 	
 }

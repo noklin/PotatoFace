@@ -1,8 +1,15 @@
 package com.noklin.client.component;
 
+import java.util.Collections;
+import java.util.Map;
+
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.noklin.client.http.TextRequest;
+import com.noklin.client.util.Json;
+import com.noklin.client.util.Resource;
 
 public abstract class Component implements IsWidget{
 	private final ComponentConfig config;
@@ -50,19 +57,29 @@ public abstract class Component implements IsWidget{
 		config.forEach((k,v) -> {
 			switch(k){
 			case "scope" : break;
+			case "att" : 
+				JSONObject jObj = v.isObject();
+				if(jObj != null) {
+					Map<String, String> att = Json.asStringMap(jObj);
+					att.forEach(this::setAttribute);
+				}
+				break;
+			case "htmlSource" : 
+				break;
 			case "name" : 
-				setAttribute("name", JsonUtil.asString(v));
+				setAttribute("name", Json.asString(v));
 				break;
 			}
 		});
+		
 	}
 	
 	private void setAttribute(String name, String value) {
 		asWidget().getElement().setAttribute(name, value);
 	}
 	
-	public static final Component NULL = new Component(null){
-		private final HTML widget = new HTML("<div>Empty component</div>");
+	public static final Component NULL = new Component(new ComponentConfig(Collections.emptyMap())){
+		private final HTML widget = new HTML("<div>Unknown component</div>");
 		@Override
 		public Widget asWidget() {
 			return widget;

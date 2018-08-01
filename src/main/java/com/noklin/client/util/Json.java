@@ -33,7 +33,7 @@ public class Json {
 		return result;
 	}
 
-	public static Map<String, String> asStringMap(JSONObject jsonObject){
+	public static Map<String, String> asStringMap(JSONObject jsonObject){ 
 		return Json.<String>asMap(jsonObject, jv->jv.isString() != null, Json::asString, HashMap::new);
 	}
 
