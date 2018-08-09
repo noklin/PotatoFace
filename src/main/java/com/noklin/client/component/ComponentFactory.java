@@ -11,14 +11,18 @@ public enum ComponentFactory {
 	 * 
 	 * */
 	
-	public Component create(String json) {
-		ComponentConfig config = new ComponentConfig(Json.asJSONValueMap(json));
-		Component component = craete(config.getString("type"), config);
+	public Component create(String jsonText) {
+		Json jSon = new Json(jsonText); 
+		Json componentType = jSon.getJson("type");
+		if(componentType.isNull()) {
+			Log.error("Failed create component. Component type is null or not exist. " + jsonText);
+		}
+		Component component = craete(componentType.asString(), jSon);
 		component.configurate(); 
 		return component;
 	}
 	
-	private Component craete(String typeName, ComponentConfig config) {
+	private Component craete(String typeName, Json config) {
 		switch(typeName) {
 			case "html": return new Html(config);
 			default:{

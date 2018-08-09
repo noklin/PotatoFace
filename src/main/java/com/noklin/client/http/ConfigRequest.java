@@ -1,15 +1,13 @@
 package com.noklin.client.http;
 
-import java.util.Map;
-
 import com.google.gwt.http.client.RequestBuilder;
 import com.noklin.client.util.Json;
 import com.noklin.client.util.Resource;
 
-public class ConfigRequest extends BaseRequestBuilder<Map<String,String>>{
+public class ConfigRequest extends BaseRequestBuilder<Json>{
 	
 	public ConfigRequest(String url) {
-		super(RequestBuilder.GET, url, Json::asStringMap);
+		super(RequestBuilder.GET, url, Json::new);
 	}
 
 	public ConfigRequest() {

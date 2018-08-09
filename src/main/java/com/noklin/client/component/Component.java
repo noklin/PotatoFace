@@ -1,19 +1,18 @@
 package com.noklin.client.component;
 
-import java.util.Collections;
 import java.util.Map;
 
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.noklin.client.http.TextRequest;
 import com.noklin.client.util.Json;
-import com.noklin.client.util.Resource;
 
 public abstract class Component implements IsWidget{
-	private final ComponentConfig config;
-	Component(ComponentConfig config){
+	
+
+	
+	private final Json config;
+	Component(Json config){
 		this.config = config;
 	}
 	
@@ -54,20 +53,17 @@ public abstract class Component implements IsWidget{
 	}
 	
 	final void configurate() {
-		config.forEach((k,v) -> {
+		config.asMap().forEach((k,v) -> {
 			switch(k){
 			case "scope" : break;
 			case "att" : 
-				JSONObject jObj = v.isObject();
-				if(jObj != null) {
-					Map<String, String> att = Json.asStringMap(jObj);
-					att.forEach(this::setAttribute);
-				}
+				Map<String, String> att = v.getJson("att").asStringMap();
+				att.forEach(this::setAttribute);
 				break;
 			case "htmlSource" : 
 				break;
 			case "name" : 
-				setAttribute("name", Json.asString(v));
+				setAttribute("name", v.asStringOrDefault("unknown"));
 				break;
 			}
 		});
@@ -78,7 +74,11 @@ public abstract class Component implements IsWidget{
 		asWidget().getElement().setAttribute(name, value);
 	}
 	
-	public static final Component NULL = new Component(new ComponentConfig(Collections.emptyMap())){
+	private Component(){
+		config = Json.NULL;
+	}
+	
+	public static final Component NULL = new Component() {
 		private final HTML widget = new HTML("<div>Unknown component</div>");
 		@Override
 		public Widget asWidget() {
@@ -87,6 +87,6 @@ public abstract class Component implements IsWidget{
 		public boolean isNullComponent() {
 			return true;
 		}
-	};
+	}; 
 	
 }
