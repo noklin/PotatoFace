@@ -13,7 +13,7 @@ public class ConfigRequest extends BaseRequestBuilder<Map<String,String>>{
 	}
 
 	public ConfigRequest() {
-		this(Resource.getConfigLocatio());
+		this(Resource.getConfigLocation());
 	}
 
 }
